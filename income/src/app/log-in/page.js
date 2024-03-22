@@ -2,7 +2,10 @@
 
 import { Logo } from "@/assets/svg/Logo";
 import { Button } from "@/components/Button";
-import Link from "next/link";
+
+import { useState } from "react";
+import { useAuth } from "@/components/providers/AuthProviders";
+import { useRouter } from "next/navigation";
 
 export default function LogIn() {
   return (
@@ -14,7 +17,13 @@ export default function LogIn() {
     </div>
   );
 }
+
 export function LogInComponent() {
+  const router = useRouter();
+  const { logIn } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div className=" flex flex-col items-center gap-[40px]">
       <Logo />
@@ -26,20 +35,41 @@ export function LogInComponent() {
       </div>
       <div className="flex flex-col w-full gap-[16px]">
         <input
+          type="email"
+          value={email}
           placeholder="Email "
           className="px-[16px] py-[12px] rounded-lg bg-[#F3F4F6] border border-[#D1D5DB] text-[#A3A3A3]"
-        ></input>
+          onChange={(event) => {
+            setEmail(event.target.value);
+          }}
+        />
         <input
+          type="password"
+          value={password}
+          onChange={(event) => {
+            setPassword(event.target.value);
+          }}
           placeholder="Password"
           className="px-[16px] py-[12px] rounded-lg bg-[#F3F4F6] border border-[#D1D5DB] text-[#A3A3A3]"
-        ></input>
-        <Button text="log in" />
+        />
+        <Button
+          onClick={() => {
+            logIn(email, password);
+          }}
+          text="log in"
+        />
       </div>
       <div className="flex items-center">
         <p className="text-[#0F172A]">Don’t have account?</p>
-        <Link className="text-[#0166FF] px-[12px] py-[4px]" href="/sign-up">
+
+        <p
+          onClick={() => {
+            router.push("/sign-up");
+          }}
+          className="text-[#0166FF] px-[12px] py-[4px] cursor-pointer"
+        >
           Sign up
-        </Link>
+        </p>
       </div>
     </div>
   );

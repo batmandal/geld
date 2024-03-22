@@ -4,31 +4,45 @@ import { DoneIcon } from "@/assets/svg/DoneIcon";
 import { MoneyIcon } from "@/assets/svg/MoneyIcon";
 import { TokenIcon } from "@/assets/svg/TokenIcon";
 import { Button } from "@/components/Button";
-import { useContext } from "react";
-import { pageContext } from "@/app/layout";
-import Link from "next/link";
+
 import { Check } from "@/components/Check";
+import { Logo } from "@/assets/svg/Logo";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/providers/AuthProviders";
 
 export default function General() {
-  const { page, setPage } = useContext(pageContext);
+  const { page } = useAuth();
 
   if (page == 1) {
     return (
-      <div className="w-full h-screen flex flex-col gap-20 items-center bg-white">
-        <Check color="#0166FF" />
+      <div className="w-full h-screen flex flex-col items-center bg-white pt-10 gap-[141px]">
+        <div className="flex flex-col items-center gap-12">
+          <Logo />
+          <Check />
+        </div>
+
         <Currency />
       </div>
     );
   } else if (page == 2) {
     return (
-      <div className="w-full h-screen flex flex-col items-center bg-white">
-        <Check color1="#0166FF" />
+      <div className="w-full h-screen flex flex-col items-center bg-white pt-10 gap-[141px]">
+        <div className="flex flex-col gap-12 items-center">
+          <Logo />
+          <Check color1="#0166FF" line="#0166FF" text1="white" />
+        </div>
+
         <Balance />
       </div>
     );
   } else if (page !== 2) {
     return (
-      <div className="w-full h-screen flex flex-col items-center bg-white">
+      <div className="w-full h-screen flex flex-col items-center bg-white pt-10 gap-[141px]">
+        <div className="flex flex-col items-center gap-12">
+          <Logo />
+          <Check color2="#0166ff" line1="#0166FF" text2="white" />
+        </div>
+
         <Done />
       </div>
     );
@@ -36,6 +50,7 @@ export default function General() {
 }
 
 export function Currency() {
+  const { setPage } = useAuth();
   return (
     <div className="grid gap-[32px] w-[384px]">
       <div className="flex flex-col items-center gap-[16px]">
@@ -57,11 +72,18 @@ export function Currency() {
           </p>
         </div>
       </div>
-      <Button text="Confirm" />
+
+      <Button
+        text="Confirm"
+        onClick={() => {
+          setPage(2);
+        }}
+      />
     </div>
   );
 }
 export function Balance() {
+  const { setPage } = useAuth();
   return (
     <div className="grid gap-[32px] w-[384px]">
       <div className="flex flex-col items-center gap-[16px]">
@@ -80,11 +102,17 @@ export function Balance() {
           </p>
         </div>
       </div>
-      <Button text="Confirm" />
+      <Button
+        text="Confirm"
+        onClick={() => {
+          setPage(3);
+        }}
+      />
     </div>
   );
 }
 export function Done() {
+  const router = useRouter();
   return (
     <div className="grid gap-[32px] w-[384px]">
       <div className="flex flex-col items-center gap-[16px]">
@@ -97,9 +125,13 @@ export function Done() {
           </p>
         </div>
       </div>
-      <Link href="/dashboard">
-        <Button text="Go to Dashboard" />
-      </Link>
+
+      <Button
+        text="Go to Dashboard"
+        onClick={() => {
+          router.push("/dashboard");
+        }}
+      />
     </div>
   );
 }

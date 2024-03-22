@@ -1,6 +1,10 @@
+"use client";
 import { Logo } from "@/assets/svg/Logo";
 import { Button } from "@/components/Button";
-import Link from "next/link";
+import { useAuth } from "@/components/providers/AuthProviders";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function SignUp() {
   return (
@@ -13,6 +17,14 @@ export default function SignUp() {
   );
 }
 export function SignUpComponent() {
+  const router = useRouter();
+  const [checkPassword, setCheckPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const { signUp } = useAuth();
+
+  // console.log(checkPassword);
   return (
     <div className=" flex flex-col items-center gap-[40px]">
       <Logo />
@@ -24,30 +36,58 @@ export function SignUpComponent() {
           Sign up below to create your Wallet account
         </p>
       </div>
-      <div className="flex flex-col gap-[16px] w-full">
-        <input
+      <form className="flex flex-col gap-[16px] w-full">
+        {/* <input
           placeholder="Name"
           className="px-[16px] py-[12px] rounded-lg bg-[#F3F4F6] border border-[#D1D5DB] text-[#A3A3A3]"
-        ></input>
+        /> */}
         <input
+          onChange={(event) => {
+            setEmail(event.target.value);
+          }}
           placeholder="Email"
+          type="email"
           className="px-[16px] py-[12px] rounded-lg bg-[#F3F4F6] border border-[#D1D5DB] text-[#A3A3A3]"
-        ></input>
+        />
         <input
+          type="password"
           placeholder="Password"
           className="px-[16px] py-[12px] rounded-lg bg-[#F3F4F6] border border-[#D1D5DB] text-[#A3A3A3]"
-        ></input>
-        <input
+          onChange={(event) => {
+            setPassword(event.target.value);
+          }}
+        />
+        {/* <input
           placeholder="Re-Password"
           className="px-[16px] py-[12px] rounded-lg bg-[#F3F4F6] border border-[#D1D5DB] text-[#A3A3A3]"
-        ></input>
-        <Button text="sign up" />
-      </div>
+          onChange={(event) => {
+            setCheckPassword(event.target.value);
+          }}
+        /> */}
+        <Button
+          text="sign up"
+          onClick={() => {
+            // if (checkPassword === password) {
+            //   console.log("same");
+            // } else {
+            //   console.log("not same");
+            // }
+            // router.push("sign-up/general");
+            // signUp(name, email, password);
+            signUp(email, password);
+          }}
+        />
+      </form>
       <div className="flex items-center">
         <p className="text-[#0F172A]">Already have account?</p>
-        <Link className="text-[#0166FF] px-[12px] py-[4px]" href="/log-in">
+        <p
+          className="text-[#0166FF] px-[12px] py-[4px] cursor-pointer"
+          onClick={() => {
+            router.push("/log-in");
+          }}
+        >
           log in
-        </Link>
+        </p>
       </div>
     </div>
   );
